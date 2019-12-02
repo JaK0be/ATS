@@ -1,5 +1,5 @@
 import Test.QuickCheck
-
+import System.IO
 --NovoProp: nome, nif, email,morada -
 --NovoCliente:nome,nif,email,morada,X,Y -
      -- X e Y : posicçao onde se encontra
@@ -43,6 +43,11 @@ email = ["@gmail.com","@hotmail.com","@live.pt"]
 brands = [(1,"Abarth"),(1,"Alfa Romeo"),(1,"Aston Martin"),(5,"Audi"),(1,"Bentley"),(9,"BMW"),(1,"Chevrolet"),(4,"Citroen"),(1,"Dacia"),(1,"DS"),(1,"Ferrari"),(3,"Fiat"),(3,"Ford"),(1,"Honda"),(1,"Hyundai"),(1,"Jaguar"),(1,"Jeep"),(1,"Kia"),(1,"Lamborghini"),(1,"Lancia"),(1,"Land Rover"),(1,"Lexus"),(1,"Maserati"),(2,"Mazda"),(8,"Mercedes-Benz"),(3,"Mini"),(1,"Mitsubishi"),(3,"Nissan"),(3,"Opel"),(6,"Peugeot"),(1,"Porsche"),(8,"Renault"),(1,"Rover"),(1,"Saab"),(4,"Seat"),(1,"Skoda"),(2,"Smart"),(1,"Suzuki"),(1,"Tesla"),(3,"Toyota"),(3,"Volvo"),(6,"Volkswagen")]
 
 -------------------------------
+samplee :: Show a => Gen a ->IO()
+samplee g =
+  do cases <- sample' g 
+     mapM_ ((appendFile "file.txt").((++)['\n']).(show)) cases
+
 
 genNome :: Gen Nome
 genNome = elements names
@@ -159,11 +164,6 @@ func3 = length(filter (\(x,y) -> x==0) func)
 
 -}
 
-{-
-gera :: Gen a -> IO a
-gera y = generate y                   
-
-main = do
-    let result = genNovoCarro --qsort [1, 3, 2]
-    return (generate result)
--}
+main :: IO()
+main = do a <- samplee genNovoCarro
+          samplee genClassificacao2 
