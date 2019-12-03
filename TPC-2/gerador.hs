@@ -8,12 +8,51 @@ import System.IO
 --Aluguer: nif cliente, X destino, Y destino, tipoCombustivel , preferencia -
 --Classificar: matricula ou nif (cliente ou prop) , nota (0-100) -
 
-data NovoProp = NovoProp Nome NIF Email Morada deriving Show
-data NovoCliente = NovoCliente Nome NIF Email Morada X Y deriving Show
-data NovoCarro = NovoCarro Tipo Marca Matricula NIF VMedia PKm CKm Autonomia X Y deriving Show
-data Aluguer = Aluguer NIF X Y Tipo Pref deriving Show
-data Classificacao1 = Classificacao1 NIF Nota deriving Show
-data Classificacao2 = Classificacao2 Matricula Nota deriving Show
+data NovoProp = NovoProp Nome NIF Email Morada
+
+instance Show NovoProp where
+  show = print_np
+
+print_np (NovoProp a b c d) = "NovoProp:" ++ a ++ "," ++ show(b) ++ "," ++ c ++ "," ++ d
+
+
+data NovoCliente = NovoCliente Nome NIF Email Morada X Y
+
+instance Show NovoCliente where
+  show = print_nc
+
+print_nc (NovoCliente a b c d e f) = "NovoCliente:" ++ a ++ "," ++ show(b) ++ "," ++ c ++ "," ++ d ++ "," ++ show(e) ++ "," ++ show(f)
+
+data NovoCarro = NovoCarro Tipo Marca Matricula NIF VMedia PKm CKm Autonomia X Y
+
+
+instance Show NovoCarro where
+  show = print_ncc
+
+print_ncc (NovoCarro a b c d e f g h i j) = "NovoCarro:" ++ show(a) ++ "," ++ b ++ "," ++ c ++ "," ++ show(d) ++ "," ++ show(e) ++ "," ++ show(f) ++ "," ++ show(g) ++ "," ++ show(h) ++ "," ++ show(i) ++ "," ++ show(j)
+
+data Aluguer = Aluguer NIF X Y Tipo Pref
+
+instance Show Aluguer where
+  show = print_al
+
+print_al (Aluguer a b c d e) = "Aluguer:" ++ show(a) ++ "," ++ show(b) ++ "," ++ show(c) ++ "," ++ show(d) ++ "," ++ show(e)
+
+
+
+data Classificacao1 = Classificacao1 NIF Nota
+
+instance Show Classificacao1 where
+  show = print_c1
+
+print_c1 (Classificacao1 a b) = "Classificar:" ++ show(a) ++ "," ++ show(b)
+
+data Classificacao2 = Classificacao2 Matricula Nota
+
+instance Show Classificacao2 where
+  show = print_c2
+
+print_c2 (Classificacao2 a b) = "Classificar:" ++ a ++ "," ++ show(b)
 
 type Nome = String
 type NIF = Integer
@@ -43,11 +82,10 @@ email = ["@gmail.com","@hotmail.com","@live.pt"]
 brands = [(1,"Abarth"),(1,"Alfa Romeo"),(1,"Aston Martin"),(5,"Audi"),(1,"Bentley"),(9,"BMW"),(1,"Chevrolet"),(4,"Citroen"),(1,"Dacia"),(1,"DS"),(1,"Ferrari"),(3,"Fiat"),(3,"Ford"),(1,"Honda"),(1,"Hyundai"),(1,"Jaguar"),(1,"Jeep"),(1,"Kia"),(1,"Lamborghini"),(1,"Lancia"),(1,"Land Rover"),(1,"Lexus"),(1,"Maserati"),(2,"Mazda"),(8,"Mercedes-Benz"),(3,"Mini"),(1,"Mitsubishi"),(3,"Nissan"),(3,"Opel"),(6,"Peugeot"),(1,"Porsche"),(8,"Renault"),(1,"Rover"),(1,"Saab"),(4,"Seat"),(1,"Skoda"),(2,"Smart"),(1,"Suzuki"),(1,"Tesla"),(3,"Toyota"),(3,"Volvo"),(6,"Volkswagen")]
 
 -------------------------------
-samplee :: Show a => Gen a ->IO()
-samplee g =
-  do cases <- sample' g 
-     mapM_ ((appendFile "file.txt").((++)['\n']).(show)) cases
-
+samplee :: Show a => String -> Gen a -> Int -> IO()
+samplee file g val =
+  do cases <- generate (sequence [ resize n g | n <- [0,1..(val-1)] ])--sample' g
+     mapM_ ((appendFile file).((++)['\n']).(show)) cases
 
 genNome :: Gen Nome
 genNome = elements names
@@ -145,25 +183,40 @@ genClassificacao1 = do a <- genNIF
                        b <- genNota
                        return (Classificacao1 a b)
 
+
 genClassificacao2 :: Gen Classificacao2
 genClassificacao2 = do a <- genMatricula
                        b <- genNota
                        return (Classificacao2 a b)
 
+genCla :: Integer -> Gen Classificacao1
+genCla a = do b <- genNota
+              return (Classificacao1 a b)
 
-{-
-totcarros = sum (map (\(x,y) -> x) marcas)
-
-marcas = [(82,"Abarth"),(368,"Alfa Romeo"),(19,"Aston Martin"),(2454,"Audi"),(30,"Bentley"),(5052,"BMW"),(166,"Chevrolet"),(1741,"Citroen"),(148,"Dacia"),(115,"DS"),(54,"Ferrari"),(1942,"Fiat"),(1653,"Ford"),(321,"Honda"),(397,"Hyundai"),(263,"Jaguar"),(175,"Jeep"),(335,"Kia"),(12,"Lamborghini"),(63,"Lancia"),(322,"Land Rover"),(146,"Lexus"),(38,"Maserati"),(384,"Mazda"),(4878,"Mercedes-Benz"),(1099,"Mini"),(392,"Mitsubishi"),(1358,"Nissan"),(2064,"Opel"),(3542,"Peugeot"),(645,"Porsche"),(4861,"Renault"),(16,"Rover"),(26,"Saab"),(1859,"Seat"),(470,"Skoda"),(675,"Smart"),(89,"Suzuki"),(48,"Tesla"),(1126,"Toyota"),(1326,"Volvo"),(2928,"Volkswagen")]
-
-func = map (\(x,y) -> (round((fromRational x)/(fromRational totcarros)*100),y)) marcas
-
-func2 = sum (map (\(x,y) -> x) func)
-
-func3 = length(filter (\(x,y) -> x==0) func)
-
--}
 
 main :: IO()
-main = do a <- samplee genNovoCarro
-          samplee genClassificacao2 
+main = do putStrLn "Ficheiro onde queres meter: "
+          file <- getLine
+          putStrLn "Número de proprietários: "
+          a <- getLine
+          putStrLn "Número de clientes: "
+          b <- getLine
+          putStrLn "Número de carros: "
+          c <- getLine
+          putStrLn "Número de alugueres: "
+          d <- getLine
+          putStrLn "Número de classificações: "
+          e <- getLine
+          let nnp = (read a :: Int)
+          let nnc = (read b :: Int)
+          let nncc = (read c :: Int)
+          let nna = (read d :: Int)
+          let nc1 = (read e :: Int)
+          let nc2 = div nc1 2
+          f <- appendFile file "Logs"
+          g <- samplee file genNovoProp nnp
+          h <- samplee file genNovoCliente nnc
+          i <- samplee file genNovoCarro nncc
+          j <- samplee file genAluguer nna
+          k <- samplee file genClassificacao1 nc2
+          samplee file genClassificacao2 nc2
