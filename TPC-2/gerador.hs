@@ -1,59 +1,8 @@
 import Test.QuickCheck
 import System.IO
---NovoProp: nome, nif, email,morada -
---NovoCliente:nome,nif,email,morada,X,Y -
-     -- X e Y : posicçao onde se encontra
---NovoCarro:tipo,marca,matricula,nif,velocidade media,preço por km, consumo por km, autonomia, X, Y -
-     -- X e Y : posicçao onde se encontra
---Aluguer: nif cliente, X destino, Y destino, tipoCombustivel , preferencia -
---Classificar: matricula ou nif (cliente ou prop) , nota (0-100) -
 
-data NovoProp = NovoProp Nome NIF Email Morada
-
-instance Show NovoProp where
-  show = print_np
-
-print_np (NovoProp a b c d) = "NovoProp:" ++ a ++ "," ++ show(b) ++ "," ++ c ++ "," ++ d
-
-
-data NovoCliente = NovoCliente Nome NIF Email Morada X Y
-
-instance Show NovoCliente where
-  show = print_nc
-
-print_nc (NovoCliente a b c d e f) = "NovoCliente:" ++ a ++ "," ++ show(b) ++ "," ++ c ++ "," ++ d ++ "," ++ show(e) ++ "," ++ show(f)
-
-data NovoCarro = NovoCarro Tipo Marca Matricula NIF VMedia PKm CKm Autonomia X Y
-
-
-instance Show NovoCarro where
-  show = print_ncc
-
-print_ncc (NovoCarro a b c d e f g h i j) = "NovoCarro:" ++ show(a) ++ "," ++ b ++ "," ++ c ++ "," ++ show(d) ++ "," ++ show(e) ++ "," ++ show(f) ++ "," ++ show(g) ++ "," ++ show(h) ++ "," ++ show(i) ++ "," ++ show(j)
-
-data Aluguer = Aluguer NIF X Y Tipo Pref
-
-instance Show Aluguer where
-  show = print_al
-
-print_al (Aluguer a b c d e) = "Aluguer:" ++ show(a) ++ "," ++ show(b) ++ "," ++ show(c) ++ "," ++ show(d) ++ "," ++ show(e)
-
-
-
-data Classificacao1 = Classificacao1 NIF Nota
-
-instance Show Classificacao1 where
-  show = print_c1
-
-print_c1 (Classificacao1 a b) = "Classificar:" ++ show(a) ++ "," ++ show(b)
-
-data Classificacao2 = Classificacao2 Matricula Nota
-
-instance Show Classificacao2 where
-  show = print_c2
-
-print_c2 (Classificacao2 a b) = "Classificar:" ++ a ++ "," ++ show(b)
-
+------------------------------------------------------------------------------
+-- Definição Dados para geração
 type Nome = String
 type NIF = Integer
 type Email = String
@@ -71,6 +20,38 @@ type X = Double
 type Y = Double
 
 
+data NovoProp = NovoProp Nome NIF Email Morada
+instance Show NovoProp where
+  show = print_np
+print_np (NovoProp a b c d) = "NovoProp:" ++ a ++ "," ++ show(b) ++ "," ++ c ++ "," ++ d
+
+data NovoCliente = NovoCliente Nome NIF Email Morada X Y
+instance Show NovoCliente where
+  show = print_nc
+print_nc (NovoCliente a b c d e f) = "NovoCliente:" ++ a ++ "," ++ show(b) ++ "," ++ c ++ "," ++ d ++ "," ++ show(e) ++ "," ++ show(f)
+
+data NovoCarro = NovoCarro Tipo Marca Matricula NIF VMedia PKm CKm Autonomia X Y
+instance Show NovoCarro where
+  show = print_ncc
+print_ncc (NovoCarro a b c d e f g h i j) = "NovoCarro:" ++ show(a) ++ "," ++ b ++ "," ++ c ++ "," ++ show(d) ++ "," ++ show(e) ++ "," ++ show(f) ++ "," ++ show(g) ++ "," ++ show(h) ++ "," ++ show(i) ++ "," ++ show(j)
+
+data Aluguer = Aluguer NIF X Y Tipo Pref
+instance Show Aluguer where
+  show = print_al
+print_al (Aluguer a b c d e) = "Aluguer:" ++ show(a) ++ "," ++ show(b) ++ "," ++ show(c) ++ "," ++ show(d) ++ "," ++ show(e)
+
+data Classificacao1 = Classificacao1 NIF Nota
+instance Show Classificacao1 where
+  show = print_c1
+print_c1 (Classificacao1 a b) = "Classificar:" ++ show(a) ++ "," ++ show(b)
+
+data Classificacao2 = Classificacao2 Matricula Nota
+instance Show Classificacao2 where
+  show = print_c2
+print_c2 (Classificacao2 a b) = "Classificar:" ++ a ++ "," ++ show(b)
+
+------------------------------------------------------------------------------
+-- Definição Listas com Nomes,Concelhos e Email para posterior utilização nos geradores
 namesF = ["Maria","Ana","Sandra","Carla","Sonia","Susana","Paula","Claudia","Patricia","Silvia","Andreia","Joana","Catia","Sara","Tania","Liliana","Ines","Catarina","Mariana","Beatriz","Daniela","Diana","Leonor","Matilde","Carolina","Francisca","Sofia","Rafaela","Adriana","Margarida","Rita","Julia","Mafalda","Benedita","Dulce","Cecilia","Lidia","Flora","Ariana","Vanessa","Filipa","Rute","Jessica","Leticia","Regina","Fatima","Cristiana","Silvana","Isabel","Bruna","Telma","Monica","Raquel","Teresa","Gisela","Cristina","Juliana","Alexandra","Gabriela","Alice","Anabela","Barbara","Laura","Tatiana","Helena","Olga"]
 namesM = ["Jose","Nuno","Pedro","Paulo","Joao","Rui","Luis","Carlos","Antonio","Ricardo","Tiago","Bruno","Andre","Diogo","Miguel","Santiago","Jaime","Francisco","Afonso","Rodrigo","Martim","Tomas","Duarte","Gabriel","Hugo","Guilherme","Leonardo","Rafael","Micael","Angelo","Lucas","Salvador","Mateus","Gustavo","Cristiano","Ruben","Salvador","Lourenco","Emanuel","Vasco","Gil","Marco","Daniel","Jorge","Fabio","Nelson","Telmo","Bernardo","Rodolfo","Goncalo","Filipe","Claudio","Eduardo","Edgar","Julio","Fernando","David","Vitor","Alfredo","Helder","Frederico","Henrique","Sergio","Roberto","Artur","Samuel","Alexandre"]
 names = namesM ++ namesF
@@ -81,24 +62,26 @@ email = ["@gmail.com","@hotmail.com","@live.pt"]
 
 brands = [(1,"Abarth"),(1,"Alfa Romeo"),(1,"Aston Martin"),(5,"Audi"),(1,"Bentley"),(9,"BMW"),(1,"Chevrolet"),(4,"Citroen"),(1,"Dacia"),(1,"DS"),(1,"Ferrari"),(3,"Fiat"),(3,"Ford"),(1,"Honda"),(1,"Hyundai"),(1,"Jaguar"),(1,"Jeep"),(1,"Kia"),(1,"Lamborghini"),(1,"Lancia"),(1,"Land Rover"),(1,"Lexus"),(1,"Maserati"),(2,"Mazda"),(8,"Mercedes-Benz"),(3,"Mini"),(1,"Mitsubishi"),(3,"Nissan"),(3,"Opel"),(6,"Peugeot"),(1,"Porsche"),(8,"Renault"),(1,"Rover"),(1,"Saab"),(4,"Seat"),(1,"Skoda"),(2,"Smart"),(1,"Suzuki"),(1,"Tesla"),(3,"Toyota"),(3,"Volvo"),(6,"Volkswagen")]
 
--------------------------------
-samplee :: Show a => String -> Gen a -> Int -> IO()
-samplee file g val =
-  do cases <- generate (sequence [ resize n g | n <- [0,1..(val-1)] ])--sample' g
-     mapM_ ((appendFile file).((++)['\n']).(show)) cases
+------------------------------------------------------------------------------
+-- Geradores de Tipos
 
+-- Gerador Nomes
 genNome :: Gen Nome
 genNome = elements names
 
+-- Gerador Moradas(Concelhos)
 genMorada :: Gen Morada
 genMorada = elements concelhos
 
+-- Gerador Tipos de Combustão
 genTipo :: Gen Tipo
 genTipo = frequency [(70, return Gasolina),(25, return Hibrido),(5, return Eletrico)]
 
+-- Gerador Marcas de Carros
 genMarca :: Gen Marca
 genMarca = frequency (map (\(x,y) -> (x,return y)) brands)
 
+-- Gerador Matrículas
 genMatricula :: Gen Matricula
 genMatricula = do a <- choose('A','Z')
                   b <- choose('A','Z')
@@ -108,39 +91,48 @@ genMatricula = do a <- choose('A','Z')
                   f <- choose(0 :: Int,9 :: Int)
                   return $ ([a] ++ [b] ++ "-" ++ show(c) ++ show(d) ++ "-" ++ show(e) ++ show(f))
 
+-- Gerador Emails
 genEmail :: Integer -> Gen Email
 genEmail x = do a <- elements email
                 return $ (show(x) ++ a)
 
+-- Gerador NIFs
 genNIF :: Gen NIF
 genNIF = choose(100000000 :: Integer,999999999 :: Integer)
 
+-- Gerador Velocidade Média
 genVMedia :: Gen VMedia
 genVMedia = choose(1 :: Int,100 :: Int)
 
+-- Gerador Preço/Km
 genPKm :: Gen PKm
 genPKm = choose(0.1 :: Double,5.0 :: Double)
 
+-- Gerador Custo/Km
 genCKm :: Gen CKm
 genCKm = choose(0.1 :: Double,0.5 :: Double)
 
+-- Gerador Autonomia
 genAutonomia :: Gen Autonomia
 genAutonomia = choose(200 :: Int,900 :: Int)
 
+-- Gerador Latitude
 genX :: Gen X
 genX = choose(-180.0 :: Double,180.0 :: Double)
 
+-- Gerador Longitude
 genY :: Gen Y
 genY = choose(-90.0 :: Double,90 :: Double)
 
+-- Gerador Preferência de Viagem
 genPref :: Gen Pref
 genPref = frequency[(50,return MaisPerto),(50, return MaisBarato)]
 
+-- Gerador Nota de avaliação
 genNota :: Gen Nota
 genNota = choose (0 :: Int,100 :: Int)
 
------------------------------------------------
-
+-- Gerador de um Proprietário
 genNovoProp :: Gen NovoProp
 genNovoProp = do a <- elements names
                  b <- genNIF
@@ -148,6 +140,7 @@ genNovoProp = do a <- elements names
                  d <- elements concelhos
                  return (NovoProp a b c d)
 
+-- Gerador de um Carro
 genNovoCarro :: Gen NovoCarro
 genNovoCarro = do a <- genTipo
                   b <- genMarca
@@ -161,6 +154,7 @@ genNovoCarro = do a <- genTipo
                   j <- genY
                   return (NovoCarro a b c d e f g h i j)
 
+-- Gerador de um Cliente
 genNovoCliente :: Gen NovoCliente
 genNovoCliente = do a <- genNome
                     b <- genNIF
@@ -170,6 +164,7 @@ genNovoCliente = do a <- genNome
                     f <- genY
                     return (NovoCliente a b c d e f)
 
+-- Gerador de Alugueres
 genAluguer :: Gen Aluguer
 genAluguer = do a <- genNIF
                 b <- genX
@@ -178,34 +173,39 @@ genAluguer = do a <- genNIF
                 e <- genPref
                 return (Aluguer a b c d e)
 
+-- Gerador de Reviews(NIF)
 genClassificacao1 :: Gen Classificacao1
 genClassificacao1 = do a <- genNIF
                        b <- genNota
                        return (Classificacao1 a b)
 
-
+-- Gerador de Reviews(Matrículas)
 genClassificacao2 :: Gen Classificacao2
 genClassificacao2 = do a <- genMatricula
                        b <- genNota
                        return (Classificacao2 a b)
 
-genCla :: Integer -> Gen Classificacao1
-genCla a = do b <- genNota
-              return (Classificacao1 a b)
+------------------------------------------------------------------------------
+-- Gerador Dados
+gerador :: Show a => String -> Gen a -> Int -> IO()
+gerador file g val =
+  do cases <- generate (sequence [ resize n g | n <- [0,1..(val-1)] ])
+     mapM_ ((appendFile file).((++)['\n']).(show)) cases
 
-
+----------------------------------------------
+-- Função Main
 main :: IO()
-main = do putStrLn "Ficheiro onde queres meter: "
+main = do putStrLn "Nome do Ficheiro onde os dados serão armazenados: "
           file <- getLine
-          putStrLn "Número de proprietários: "
+          putStrLn "Número de Proprietários a gerar: "
           a <- getLine
-          putStrLn "Número de clientes: "
+          putStrLn "Número de Clientes a gerar: "
           b <- getLine
-          putStrLn "Número de carros: "
+          putStrLn "Número de Carros a gerar: "
           c <- getLine
-          putStrLn "Número de alugueres: "
+          putStrLn "Número de Alugueres a gerar: "
           d <- getLine
-          putStrLn "Número de classificações: "
+          putStrLn "Número de Classificações a gerar: "
           e <- getLine
           let nnp = (read a :: Int)
           let nnc = (read b :: Int)
@@ -214,9 +214,9 @@ main = do putStrLn "Ficheiro onde queres meter: "
           let nc1 = (read e :: Int)
           let nc2 = div nc1 2
           f <- appendFile file "Logs"
-          g <- samplee file genNovoProp nnp
-          h <- samplee file genNovoCliente nnc
-          i <- samplee file genNovoCarro nncc
-          j <- samplee file genAluguer nna
-          k <- samplee file genClassificacao1 nc2
-          samplee file genClassificacao2 nc2
+          g <- gerador file genNovoProp nnp
+          h <- gerador file genNovoCliente nnc
+          i <- gerador file genNovoCarro nncc
+          j <- gerador file genAluguer nna
+          k <- gerador file genClassificacao1 nc2
+          gerador file genClassificacao2 nc2
