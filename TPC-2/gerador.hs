@@ -212,7 +212,7 @@ main = do putStrLn "Nome do Ficheiro onde os dados serão armazenados: "
           let nncc = (read c :: Int)
           let nna = (read d :: Int)
           let nc1 = (read e :: Int)
-          let nc2 = div nc1 2
+          let nc2 = div nc1 2 
           f <- appendFile file "Logs"
           g <- gerador file genNovoProp nnp
           h <- gerador file genNovoCliente nnc
