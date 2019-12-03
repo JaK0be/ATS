@@ -211,12 +211,14 @@ main = do putStrLn "Nome do Ficheiro onde os dados serão armazenados: "
           let nnc = (read b :: Int)
           let nncc = (read c :: Int)
           let nna = (read d :: Int)
-          let nc1 = (read e :: Int)
-          let nc2 = div nc1 2 
+          let nc1 = (read e :: Double)
+          let nc2 = ceiling (nc1/2.0) :: Int
+          let nc3 = floor (nc1/2.0) :: Int
           f <- appendFile file "Logs"
           g <- gerador file genNovoProp nnp
           h <- gerador file genNovoCliente nnc
           i <- gerador file genNovoCarro nncc
           j <- gerador file genAluguer nna
-          k <- gerador file genClassificacao1 nc2
-          gerador file genClassificacao2 nc2
+          k <- if(nc2 - nc3 == 0) then gerador file genClassificacao1 nc3 else gerador file genClassificacao1 nc2
+          l <- gerador file genClassificacao2 nc3
+          print "Ficheiro Gerado"
