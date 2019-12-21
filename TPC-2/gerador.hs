@@ -116,11 +116,11 @@ genCKm = choose(0.1 :: Double,0.5 :: Double)
 genAutonomia :: Gen Autonomia
 genAutonomia = choose(200 :: Int,900 :: Int)
 
--- Gerador Latitude
+-- Gerador Longitude
 genX :: Gen X
 genX = choose(-180.0 :: Double,180.0 :: Double)
 
--- Gerador Longitude
+-- Gerador Latitude
 genY :: Gen Y
 genY = choose(-90.0 :: Double,90 :: Double)
 
