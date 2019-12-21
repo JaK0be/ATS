@@ -134,10 +134,10 @@ genNota = choose (0 :: Int,100 :: Int)
 
 -- Gerador de um Proprietário
 genNovoProp :: Gen NovoProp
-genNovoProp = do a <- elements names
+genNovoProp = do a <- genNome
                  b <- genNIF
                  c <- genEmail b
-                 d <- elements concelhos
+                 d <- genMorada
                  return (NovoProp a b c d)
 
 -- Gerador de um Carro
@@ -159,7 +159,7 @@ genNovoCliente :: Gen NovoCliente
 genNovoCliente = do a <- genNome
                     b <- genNIF
                     c <- genEmail b
-                    d <- elements concelhos
+                    d <- genMorada
                     e <- genX
                     f <- genY
                     return (NovoCliente a b c d e f)
